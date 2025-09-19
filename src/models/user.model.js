@@ -17,6 +17,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
+      required: true,
     },
     role: {
       type: String,
@@ -24,14 +25,37 @@ const userSchema = new Schema(
       default: "user",
     },
     profile: {
-      firstname: { type: String, minLength: 2, maxLength: 50 },
-      lastname: { type: String, minLength: 2, maxLength: 50 },
-      biography: { type: String, maxLength: 500 },
-      avatarUrl: { type: String },
-      birthdate: { type: Date },
+      firstname: {
+        type: String,
+        minLength: 2,
+        maxLength: 50,
+        required: true,
+      },
+      lastname: {
+        type: String,
+        minLength: 2,
+        maxLength: 50,
+        required: true,
+      },
+      biography: {
+        type: String,
+        maxLength: 500,
+        required: false,
+      },
+      avatarUrl: {
+        type: String,
+        required: false,
+        match: /^(https?:\/\/)([\w.-]+)\.([a-z\.]{2,})([\/\w .-])\/?$/i,
+      },
+      birthdate: {
+        type: Date,
+        required: false,
+      },
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 export const UserModel = model("User", userSchema);

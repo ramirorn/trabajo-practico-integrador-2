@@ -13,9 +13,12 @@ const tagSchema = new Schema(
     description: {
       type: String,
       maxLength: 200,
+      required: false,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 export const TagModel = model("Tag", tagSchema);

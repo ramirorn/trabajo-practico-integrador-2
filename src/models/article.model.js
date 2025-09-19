@@ -25,6 +25,7 @@ const articleSchema = new Schema(
     author: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     tags: [
       {
@@ -33,5 +34,9 @@ const articleSchema = new Schema(
       },
     ],
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
+
+export const ArticleModel = model("Article", articleSchema);
