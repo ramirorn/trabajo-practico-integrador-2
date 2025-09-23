@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const tagSchema = new Schema(
+const TagSchema = new Schema(
   {
     name: {
       type: String,
@@ -21,4 +21,4 @@ const tagSchema = new Schema(
   }
 );
 
-export const TagModel = model("Tag", tagSchema);
+export const TagModel = model("Tag", TagSchema);

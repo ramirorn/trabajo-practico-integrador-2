@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const commentSchema = new Schema(
+const CommentSchema = new Schema(
   {
     content: {
       type: String,
@@ -24,4 +24,4 @@ const commentSchema = new Schema(
   }
 );
 
-export const CommentModel = model("Comment", commentSchema);
+export const CommentModel = model("Comment", CommentSchema);

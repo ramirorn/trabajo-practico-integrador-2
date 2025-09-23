@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const articleSchema = new Schema(
+const ArticleSchema = new Schema(
   {
     title: {
       type: String,
@@ -39,4 +39,4 @@ const articleSchema = new Schema(
   }
 );
 
-export const ArticleModel = model("Article", articleSchema);
+export const ArticleModel = model("Article", ArticleSchema);

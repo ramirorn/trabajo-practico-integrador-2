@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const userSchema = new Schema(
+const UserSchema = new Schema(
   {
     username: {
       type: String,
@@ -23,15 +23,16 @@ const userSchema = new Schema(
       type: String,
       enum: ["user", "admin"],
       default: "user",
+      required: false,
     },
     profile: {
-      firstname: {
+      firstName: {
         type: String,
         minLength: 2,
         maxLength: 50,
         required: true,
       },
-      lastname: {
+      lastName: {
         type: String,
         minLength: 2,
         maxLength: 50,
@@ -58,4 +59,4 @@ const userSchema = new Schema(
   }
 );
 
-export const UserModel = model("User", userSchema);
+export const UserModel = model("User", UserSchema);
