@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import { ArticleModel } from "./article.model.js";
 
 const TagSchema = new Schema(
   {
@@ -20,5 +21,18 @@ const TagSchema = new Schema(
     timestamps: true,
   }
 );
+
+// Eliminacion en cascada de Tags
+TagSchema.pre("findOneAndDelete", async function (next) {
+  const tag = await this.model.findOne(this.getFilter());
+
+  // Quita las tags borradas del articulo donde estan
+  if (tag) {
+    await ArticleModel.updateMany(
+      { tags: tag._id },
+      { $pull: { tags: tag._id } }
+    );
+  }
+});
 
 export const TagModel = model("Tag", TagSchema);

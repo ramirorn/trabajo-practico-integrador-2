@@ -44,3 +44,23 @@ export const getAllUsers = async (req, res) => {
 // Actualizar un usuario por ID
 
 // Eliminar un usuario
+export const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedUser = await UserModel.findByIdAndUpdate(
+      id,
+      { deleted_at: new Date() },
+      { new: true }
+    );
+    res.status(200).json({
+      ok: true,
+      message: "Usuario eliminado exitosamente",
+      data: deletedUser,
+    });
+  } catch (err) {
+    res.status(500).json({
+      ok: false,
+      message: "Error interno del servidor",
+    });
+  }
+};

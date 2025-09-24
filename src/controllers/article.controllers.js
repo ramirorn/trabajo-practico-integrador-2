@@ -2,7 +2,7 @@ import { ArticleModel } from "../models/article.model.js";
 
 // Crear un article
 export const createArticle = async (req, res) => {
-  const { title, content, excerpt, status, author } = req.body;
+  const { title, content, excerpt, status, author, tags } = req.body;
   try {
     const article = await ArticleModel.create({
       title,
@@ -10,6 +10,7 @@ export const createArticle = async (req, res) => {
       excerpt,
       status,
       author,
+      tags,
     });
     res.status(201).json({
       ok: true,

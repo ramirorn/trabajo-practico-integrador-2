@@ -25,6 +25,11 @@ const UserSchema = new Schema(
       default: "user",
       required: false,
     },
+    deleted_at: {
+      type: Date,
+      default: null,
+      required: false,
+    },
     profile: {
       firstName: {
         type: String,
@@ -58,5 +63,11 @@ const UserSchema = new Schema(
     timestamps: true,
   }
 );
+
+// Ignora documentos con el deleted_at distinto de null
+UserSchema.pre(/^find/, function (next) {
+  this.where({ deleted_at: { $eq: null } });
+  next();
+});
 
 export const UserModel = model("User", UserSchema);
