@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import { CommentModel } from "./comment.model.js";
 
 const ArticleSchema = new Schema(
   {
@@ -38,5 +39,15 @@ const ArticleSchema = new Schema(
     timestamps: true,
   }
 );
+
+// Eliminacion en cascada
+ArticleSchema.pre("findOneAndDelete", async function (next) {
+  const article = await this.model.findOne(this.getFilter());
+
+  if (article) {
+    await CommentModel.deleteMany({ article: article._id });
+  }
+  next();
+});
 
 export const ArticleModel = model("Article", ArticleSchema);
