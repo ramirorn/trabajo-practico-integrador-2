@@ -15,7 +15,8 @@ export const ownerOrAdminCommentMiddleware = async (req, res, next) => {
                 message: "No tienes permisos para realizar esta accion",
             });
         }
-
+        // Continuar con la ejecucion
+        next();
     } catch (err) {
         res.status(500).json({
             ok: false,
@@ -39,7 +40,8 @@ export const ownerOrAdminArticleMiddleware = async (req, res, next) => {
                 message: "No tienes permisos para realizar esta accion",
             });
         }
-
+        // Continuar con la ejecucion
+        next();
     } catch (err) {
         res.status(500).json({
             ok: false,
