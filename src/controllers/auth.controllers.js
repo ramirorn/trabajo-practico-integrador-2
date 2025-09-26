@@ -84,3 +84,65 @@ export const logout = async (req, res) => {
     });
   }
 };
+
+// Traer perfil del usuario autenticado
+export const getAuthProfile = async (req, res) => {
+  try {
+    // Obtener el usuario logueado
+    const usuarioLogueado = req.usuarioLogueado;
+
+    // Buscar el usuario en la base de datos
+    const user = await UserModel.findOne({ _id: usuarioLogueado.id }).select(
+      "-password"
+    );
+
+    res.status(200).json({
+      ok: true,
+      profile: user,
+    });
+  } catch (err) {
+    res.status(500).json({
+      ok: false,
+      message: "Error interno del servidor",
+      err,
+    });
+  }
+};
+
+// Actualizar perfil del usuario autenticado
+export const updateAuthProfile = async (req, res) => {
+  try {
+    // Obtener los datos validados y solo los que vienen en el body
+    const data = matchedData(req, { locations: ["body"] });
+
+    // Si no hay datos para actualizar
+    if (Object.keys(data).length === 0) { // Object.keys(data) devuelve un array con las claves del objeto
+      return res.status(400).json({
+        ok: false,
+        message: "Sin datos para actualizar",
+      });
+    }
+
+    // Obtener el usuario logueado
+    const usuarioLogueado = req.usuarioLogueado;
+
+    // Actualizar el perfil del usuario
+    const updatedProfile = await UserModel.findByIdAndUpdate(
+      usuarioLogueado.id,
+      { $set: data}, // Actualizar el campo profile{}
+      { new: true } // Devolver el documento actualizado
+    ).select("-password"); // Devolver el usuario actualizado sin la contraseña
+    
+    res.status(200).json({
+      ok: true,
+      message: "Perfil actualizado correctamente",
+      profile: updatedProfile,
+    });
+  } catch (err) {
+    res.status(500).json({
+      ok: false,
+      message: "Error interno del servidor",
+      err,
+    });
+  }
+};

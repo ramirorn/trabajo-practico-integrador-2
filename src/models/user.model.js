@@ -51,7 +51,6 @@ const UserSchema = new Schema(
       avatarUrl: {
         type: String,
         required: false,
-        match: /^(https?:\/\/)([\w.-]+)\.([a-z\.]{2,})([\/\w .-])\/?$/i,
       },
       birthdate: {
         type: Date,
