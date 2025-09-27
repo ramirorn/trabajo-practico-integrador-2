@@ -55,12 +55,12 @@ export const getTagById = async (req, res) => {
 
 // Actualizar Tag
 export const updateTag = async (req, res) => {
-  const { name, description } = req.body;
   const { id } = req.params;
+  const data = req.body;
   try {
     const updated = await TagModel.findByIdAndUpdate(
       id,
-      { name, description },
+      { $set: data },
       { new: true }
     );
     res
