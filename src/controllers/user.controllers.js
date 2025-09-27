@@ -43,7 +43,7 @@ export const getAllUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await UserModel.findById(id);
+    const user = await UserModel.findById(id).populate("Articles").populate("Comments");
     if (user) {
       res.status(200).json({
         ok: true,
@@ -57,9 +57,11 @@ export const getUserById = async (req, res) => {
       })
     }
   } catch (err) {
+    console.log(err)
     res.status(500).json({
       ok: false,
       message: "Error interno del servidor",
+      err
     });
   }
 };

@@ -23,33 +23,21 @@ export const createComment = async (req, res) => {
   }
 };
 
-// Traer todos los comments
-export const getAllComments = async (req, res) => {
+// Traer el Article de un Comment
+export const getArticleComments = async (req, res) => {
+  const {articleId} = req.params;
   try {
-    const comments = await CommentModel.find();
+    // Trae el article de un comment
+    const comments = await CommentModel.find({article: articleId})
+    .populate("article", "-_id content"); // Trae el articulo relacionado
     if (!comments)
       return res
         .status(404)
         .json({ msg: "No hay articles en la base de datos" });
-    res.status(200).json(comments);
-  } catch (err) {
-    res.status(500).json({
-      ok: false,
-      message: "Error interno del servidor",
+    res.status(200).json({
+      ok: true,
+      Comment: comments
     });
-  }
-};
-
-// Traer comment por ID
-export const getCommentById = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const comment = await CommentModel.findById(id);
-    if (!comment)
-      return res
-        .status(404)
-        .json({ msg: "No se encontro el comment en la base de datos" });
-    res.status(200).json(comment);
   } catch (err) {
     res.status(500).json({
       ok: false,

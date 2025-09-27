@@ -60,8 +60,29 @@ const UserSchema = new Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
+
+// Populates inversos (Virtuals)
+// Un virtual es un campo temporal que no se almacena en la base de datos y solo se muestra con un populate
+UserSchema.virtual("Articles", { // Virtual de Articles
+  ref: "Article", // Colecciona a usar
+  localField: "_id", // Campo que se va a usar para el match
+  foreignField: "author", // Campo que debe coincidir con el localfield
+  justOne: false, // Articles sera un array
+});
+
+// Virtual de comments
+UserSchema.virtual("Comments", {
+  ref: "Comment",
+  localField: "_id",
+  foreignField: "author",
+  justOne: false,
+});
+
+// Convertir un documento a JSON y que incluya las virtuals (como Articles) en la salida.
+UserSchema.set("toJSON", { virtuals: true });
 
 // Ignora documentos con el deleted_at distinto de null
 UserSchema.pre(/^find/, function (next) {

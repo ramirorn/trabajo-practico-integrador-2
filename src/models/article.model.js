@@ -37,8 +37,19 @@ const ArticleSchema = new Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
+
+// Populate inverso
+ArticleSchema.virtual("Comments", {
+  ref: "Comment",
+  localField: "_id",
+  foreignField: "article",
+  justOne: false,
+});
+
+ArticleSchema.set("toJSON", { virtuals: true });
 
 // Eliminacion en cascada
 ArticleSchema.pre("findOneAndDelete", async function (next) {

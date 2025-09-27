@@ -1,8 +1,7 @@
 import { Router } from "express";
 import {
   createComment,
-  getAllComments,
-  getCommentById,
+  getArticleComments,
   updateComment,
   deleteComment,
   getMyComments,
@@ -12,8 +11,8 @@ import { ownerOrAdminCommentMiddleware } from "../middlewares/ownerOrAdmin.middl
 
 export const commentRouter = Router();
 commentRouter.post("/comments",authMiddleware, createComment);
-commentRouter.get("/comments", getAllComments);
+// Traer el articulo de un comment
+commentRouter.get("/comments/article/:articleId", getArticleComments);
 commentRouter.get("/comments/my",authMiddleware, getMyComments)
-commentRouter.get("/comments/:id", getCommentById);
 commentRouter.put("/comments/:id",authMiddleware,ownerOrAdminCommentMiddleware, updateComment);
 commentRouter.delete("/comments/:id",authMiddleware, ownerOrAdminCommentMiddleware,deleteComment);

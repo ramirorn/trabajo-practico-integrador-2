@@ -29,7 +29,8 @@ export const createArticle = async (req, res) => {
 // Traer todos los articles
 export const getAllArticles = async (req, res) => {
   try {
-    const articles = await ArticleModel.find();
+    const articles = await ArticleModel.find().populate("author", " username email role")
+    .populate("tags", " name description");
     if (!articles)
       return res
         .status(404)
@@ -47,7 +48,10 @@ export const getAllArticles = async (req, res) => {
 export const getArticleById = async (req, res) => {
   const { id } = req.params;
   try {
-    const article = await ArticleModel.findById(id);
+    const article = await ArticleModel.findById(id)
+    .populate("author", "-_id username email role")
+    .populate("Comments", "-_id content")
+    .populate("tags", " -_id name description")
     if (!article)
       return res
         .status(404)
