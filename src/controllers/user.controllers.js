@@ -40,9 +40,57 @@ export const getAllUsers = async (req, res) => {
 };
 
 // Traer un usuario por ID
+export const getUserById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await UserModel.findById(id);
+    if (user) {
+      res.status(200).json({
+        ok: true,
+        message: "Usuario encontrado",
+        User: user,
+      });
+    } else {
+      return res.status(404).json({
+        ok: false,
+        message: "No se encontro el usuario en la base de datos"
+      })
+    }
+  } catch (err) {
+    res.status(500).json({
+      ok: false,
+      message: "Error interno del servidor",
+    });
+  }
+};
 
 // Actualizar un usuario por ID
-
+export const updateUser = async (req, res) => {
+  const { username, email, password, role, profile, lastName, firstName } =
+    req.body;
+  const { id } = req.params;
+  try {
+    const updated = await UserModel.findByIdAndUpdate(id, {
+      username,
+      email,
+      password,
+      role,
+      profile,
+      lastName,
+      firstName,
+    });
+    res.status(200).json({
+      ok: true,
+      messsage: "Usuario actualizado correctamente",
+      Updated: updated,
+    });
+  } catch (err) {
+    res.status(500).json({
+      ok: false,
+      message: "Error interno del servidor",
+    });
+  }
+};
 // Eliminar un usuario
 export const deleteUser = async (req, res) => {
   const { id } = req.params;
