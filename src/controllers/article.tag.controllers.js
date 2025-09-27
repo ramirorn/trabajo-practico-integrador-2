@@ -8,7 +8,7 @@ export const addTagToArticle = async (req, res) => {
         const addTagToArticle = await ArticleModel.findByIdAndUpdate(
             articleId,
             {
-                $push: { tags: tagId }, // $push agrega un elemento a un array
+                $addToSet: { tags: tagId }, // $addtoset agrega elementos al array pero evita duplicados
             },
             { new: true } // new: true devuelve el documento actualizado
         );

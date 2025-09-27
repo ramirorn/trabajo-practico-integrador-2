@@ -4,7 +4,7 @@ import { tagRouter } from "./tag.routes.js";
 import { articleRouter } from "./article.routes.js";
 import { commentRouter } from "./comment.routes.js";
 import { authRouter } from "./auth.routes.js";
-import { articleTagRouter } from "./article.tag.routes.js";
+import { articleTagRouter } from "./article_tag.routes.js";
 
 // Router principal
 export const routes = Router();
