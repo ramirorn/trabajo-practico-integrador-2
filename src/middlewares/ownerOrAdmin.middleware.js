@@ -29,9 +29,23 @@ export const ownerOrAdminCommentMiddleware = async (req, res, next) => {
 // Middleware para verificar si el usuario autenticado es el dueño del article o un admin
 export const ownerOrAdminArticleMiddleware = async (req, res, next) => {
     const usuarioLogueado = req.usuarioLogueado;
+    // Se desestructuran dos ID's porque uno es usadad por articlecontrollers y otra usado por articletagcontrollers
+    const {id} = req.params;
+    const {articleId} = req.params;
     try {
         // Encuentra el article por su ID
-        const article = await ArticleModel.findById(req.params.articleId);
+        let article
+        if(id){
+            article = await ArticleModel.findById(id);
+        }else if(articleId){
+            article = await ArticleModel.findById(articleId);
+        }
+    
+        if(!article){
+            return res.status(404).json({
+                message: "El articulo no existe"
+            })
+        }
 
         // Verifica si el usuario logueado es admin o el autor del article
         if (usuarioLogueado.role !== "admin" && !article.author.equals(usuarioLogueado.id)) {
@@ -43,6 +57,7 @@ export const ownerOrAdminArticleMiddleware = async (req, res, next) => {
         // Continuar con la ejecucion
         next();
     } catch (err) {
+        console.log(err)
         res.status(500).json({
             ok: false,
             message: "Error interno del servidor",

@@ -61,6 +61,32 @@ export const getArticleById = async (req, res) => {
   }
 };
 
+// Traer todos los comentarios del usuario logueado
+export const getMyArticles = async (req,res) => {
+  try {
+    const usuarioLogueado = req.usuarioLogueado;
+    const getMyArticles = await ArticleModel.find({author: usuarioLogueado.id})
+    if (getMyArticles.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        message: "No se encontraron articulos en la base de datos"
+      })
+    }
+
+    res.status(200).json({
+      ok: true,
+      message: "Estos son tus articulos",
+      comments: getMyArticles
+    })
+  } catch (err) {
+    res.status(500).json({
+      ok: false,
+      message: "Error interno del servidor",
+    });
+  }
+  
+}
+
 // Actualizar un article
 export const updateArticle = async (req, res) => {
   const { title, content, excerpt, status, author } = req.body;
@@ -86,13 +112,17 @@ export const updateArticle = async (req, res) => {
 export const deleteArticle = async (req, res) => {
   const { id } = req.params;
   try {
-    await ArticleModel.findByIdAndDelete(id, { new: true });
-    res.status(204).end();
+    const deleted = await ArticleModel.findByIdAndDelete(id, { new: true });
+    res.status(200).json({
+      ok: true, 
+      message: "Usuario borrado exitosamente",
+      deleted: deleted
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       ok: false,
-      message: "Error interno del servidor",
+      message: "Error interno del servidor"
     });
   }
 };

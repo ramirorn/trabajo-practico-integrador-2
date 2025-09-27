@@ -58,6 +58,32 @@ export const getCommentById = async (req, res) => {
   }
 };
 
+// Traer todos los comentarios del usuario logueado
+export const getMyComments = async (req,res) => {
+  try {
+    const usuarioLogueado = req.usuarioLogueado;
+    const getMyComments = await CommentModel.find({author: usuarioLogueado.id})
+    if (getMyComments.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        message: "No se encontraron comentarios en la base de datos"
+      })
+    }
+
+    res.status(200).json({
+      ok: true,
+      message: "Estos son tus comentarios",
+      comments: getMyComments
+    })
+  } catch (err) {
+    res.status(500).json({
+      ok: false,
+      message: "Error interno del servidor",
+    });
+  }
+  
+}
+
 // Actualizar un comment
 export const updateComment = async (req, res) => {
   const { content, author, article } = req.body;
@@ -69,7 +95,7 @@ export const updateComment = async (req, res) => {
       { new: true }
     );
     res
-      .status(200)
+      .status(201)
       .json({ ok: true, msg: "Comment actualizado con exito", data: updated });
   } catch (err) {
     res.status(500).json({
@@ -83,8 +109,12 @@ export const updateComment = async (req, res) => {
 export const deleteComment = async (req, res) => {
   const { id } = req.params;
   try {
-    await CommentModel.findByIdAndDelete(id, { new: true });
-    res.status(204).end();
+    const deleted= await CommentModel.findByIdAndDelete(id, {new: true});
+    res.status(200).json({
+      ok: true,
+      message: "Comentario borrado exitosamente",
+      deleted
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
