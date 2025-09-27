@@ -74,12 +74,12 @@ export const getMyComments = async (req,res) => {
 
 // Actualizar un comment
 export const updateComment = async (req, res) => {
-  const { content, author, article } = req.body;
   const { id } = req.params;
+  const data = req.body;
   try {
     const updated = await CommentModel.findByIdAndUpdate(
       id,
-      { content, author, article },
+      { $set: data },
       { new: true }
     );
     res
