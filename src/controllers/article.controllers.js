@@ -93,12 +93,12 @@ export const getMyArticles = async (req,res) => {
 
 // Actualizar un article
 export const updateArticle = async (req, res) => {
-  const { title, content, excerpt, status, author } = req.body;
+  const data = req.body;
   const { id } = req.params;
   try {
     const updated = await ArticleModel.findByIdAndUpdate(
       id,
-      { title, content, excerpt, status, author },
+      { $set: data },
       { new: true }
     );
     res
@@ -119,7 +119,7 @@ export const deleteArticle = async (req, res) => {
     const deleted = await ArticleModel.findByIdAndDelete(id, { new: true });
     res.status(200).json({
       ok: true, 
-      message: "Usuario borrado exitosamente",
+      message: "Article borrado exitosamente",
       deleted: deleted
     });
   } catch (err) {
