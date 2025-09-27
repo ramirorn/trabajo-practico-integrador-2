@@ -1,5 +1,5 @@
 import { UserModel } from "../models/user.model.js";
-
+import {matchedData} from "express-validator"
 // Crear un nuevo usuario
 // export const createUser = async (req, res) => {
 //   const { username, email, password, profile, lastName, firstName } = req.body;
@@ -68,31 +68,24 @@ export const getUserById = async (req, res) => {
 
 // Actualizar un usuario por ID
 export const updateUser = async (req, res) => {
-  const { username, email, password, role, profile, lastName, firstName } =
-    req.body;
-  const { id } = req.params;
+  const{id} = req.params;
+  const data = req.body;
   try {
-    const updated = await UserModel.findByIdAndUpdate(id, {
-      username,
-      email,
-      password,
-      role,
-      profile,
-      lastName,
-      firstName,
-    });
+    const updated = await UserModel.findByIdAndUpdate(id,{$set: data},{ new: true });
     res.status(200).json({
       ok: true,
       messsage: "Usuario actualizado correctamente",
-      Updated: updated,
+      updated: updated,
     });
   } catch (err) {
+    console.log(err)
     res.status(500).json({
       ok: false,
-      message: "Error interno del servidor",
+      message: "Error interno del servidor",err
     });
   }
 };
+
 // Eliminar un usuario
 export const deleteUser = async (req, res) => {
   const { id } = req.params;
